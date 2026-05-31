@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StudentCare - Student Management</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- navbar -->
+    <header>
+        <nav>
+            <div class="logo">&#127891; StudentCare</div>
+            <div class="hamburger" id="hamburger" onclick="toggleMenu()">&#9776;</div>
+            <ul id="navLinks">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#students">Students</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#contact">Contact</a></li>
+                <li><a href="#" id="adminLoginBtn" onclick="openLogin()">Admin Login</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- public sections -->
+    <div id="publicSite">
+
+        <!-- hero -->
+        <section id="home" class="hero">
+            <h1>Welcome to StudentCare</h1>
+            <p>A simple platform to manage and showcase student records easily.</p>
+            <a href="#students" class="hero-btn">View Students</a>
+        </section>
+
+        <!-- student showcase -->
+        <section id="students">
+            <h2>Our Students</h2>
+            <p class="section-sub">Meet some of our talented students from various departments</p>
+            <div class="student-grid" id="publicStudentGrid">
+                <!-- filled by js -->
+            </div>
+        </section>
+
+        <!-- about -->
+        <section id="about">
+            <h2>About StudentCare</h2>
+            <div class="about-content">
+                <div class="about-text">
+                    <p>StudentCare is a student management platform designed to help educational institutions keep track of their students. Our system provides an easy way to add, search, filter and manage student records all in one place.</p>
+                    <p>Whether you are an administrator looking to organize student data or a visitor wanting to learn about our students, StudentCare has you covered.</p>
+                </div>
+                <div class="features-grid">
+                    <div class="feature-box">
+                        <span class="feature-icon">&#128203;</span>
+                        <h3>Easy Management</h3>
+                        <p>Add and remove student records with just a few clicks</p>
+                    </div>
+                    <div class="feature-box">
+                        <span class="feature-icon">&#128269;</span>
+                        <h3>Quick Search</h3>
+                        <p>Find any student instantly by name or department</p>
+                    </div>
+                    <div class="feature-box">
+                        <span class="feature-icon">&#128241;</span>
+                        <h3>Responsive</h3>
+                        <p>Works on desktop, tablet and mobile devices</p>
+                    </div>
+                    <div class="feature-box">
+                        <span class="feature-icon">&#128190;</span>
+                        <h3>Data Storage</h3>
+                        <p>All records saved locally so nothing gets lost</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- contact -->
+        <section id="contact">
+            <h2>Contact Us</h2>
+            <p class="section-sub">Have any questions? Send us a message</p>
+            <form id="contactForm" class="contact-form" onsubmit="handleContact(event)">
+                <input type="text" id="contactName" placeholder="Your Name" required>
+                <input type="email" id="contactEmail" placeholder="Your Email" required>
+                <textarea id="contactMessage" placeholder="Your Message" rows="5" required></textarea>
+                <button type="submit">Send Message</button>
+            </form>
+            <p id="contactSuccess" style="display:none; color:green; margin-top:10px;">Message sent successfully!</p>
+        </section>
+
+    </div>
+
+    <!-- login modal -->
+    <div class="modal-overlay" id="loginModal">
+        <div class="modal-box">
+            <span class="close-btn" onclick="closeLogin()">&times;</span>
+            <h2>Admin Login</h2>
+            <input type="text" id="username" placeholder="Username">
+            <input type="password" id="password" placeholder="Password">
+            <button onclick="handleLogin()">Login</button>
+            <p id="loginError" style="color:red; display:none; margin-top:10px;">Invalid username or password!</p>
+        </div>
+    </div>
+
+    <!-- edit modal -->
+    <div class="modal-overlay" id="editModal">
+        <div class="modal-box">
+            <span class="close-btn" onclick="closeEdit()">&times;</span>
+            <h2>Edit Student</h2>
+            <input type="hidden" id="editIndex">
+            <div class="admin-form" style="max-width:100%; margin-top:10px;">
+                <input type="text" id="editStudentName" placeholder="Student Name">
+                <select id="editStudentCategory">
+                    <option value="Computer Science">Computer Science</option>
+                    <option value="Engineering">Engineering</option>
+                    <option value="Business">Business</option>
+                    <option value="Arts">Arts</option>
+                    <option value="Science">Science</option>
+                </select>
+                <input type="text" id="editStudentImage" placeholder="Image URL (optional)">
+                <textarea id="editStudentDesc" placeholder="Short Description" rows="3"></textarea>
+                <button onclick="saveEdit()">Save Changes</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- admin panel -->
+    <div id="adminPanel" style="display:none;">
+
+        <div class="admin-topbar">
+            <h2>Admin Dashboard</h2>
+            <button class="logout-btn" onclick="handleLogout()">Logout</button>
+        </div>
+
+        <div class="stats-row">
+            <div class="stat-card">
+                <h3 id="statTotal">0</h3>
+                <p>Total Students</p>
+            </div>
+            <div class="stat-card">
+                <h3 id="statDepts">0</h3>
+                <p>Departments</p>
+            </div>
+        </div>
+
+        <!-- add form -->
+        <div class="admin-section">
+            <h3>Add New Student</h3>
+            <div class="admin-form">
+                <input type="text" id="studentName" placeholder="Student Name">
+                <select id="studentCategory">
+                    <option value="">-- Select Department --</option>
+                    <option value="Computer Science">Computer Science</option>
+                    <option value="Engineering">Engineering</option>
+                    <option value="Business">Business</option>
+                    <option value="Arts">Arts</option>
+                    <option value="Science">Science</option>
+                </select>
+                <input type="text" id="studentImage" placeholder="Image URL (optional)">
+                <textarea id="studentDesc" placeholder="Short Description" rows="3"></textarea>
+                <button onclick="addStudent()">Add Student</button>
+            </div>
+        </div>
+
+        <!-- search and filter -->
+        <div class="admin-section">
+            <div class="controls-row">
+                <input type="text" id="searchInput" placeholder="Search by name..." onkeyup="renderAdmin()">
+                <select id="filterDept" onchange="renderAdmin()">
+                    <option value="all">All Departments</option>
+                    <option value="Computer Science">Computer Science</option>
+                    <option value="Engineering">Engineering</option>
+                    <option value="Business">Business</option>
+                    <option value="Arts">Arts</option>
+                    <option value="Science">Science</option>
+                </select>
+                <button id="viewToggleBtn" onclick="toggleView()">Table View</button>
+            </div>
+        </div>
+
+        <!-- student cards -->
+        <div class="admin-section">
+            <div id="adminStudentContainer" class="student-grid">
+            </div>
+
+            <div id="adminStudentTable" style="display:none;">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Department</th>
+                            <th>Description</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="studentTableBody">
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- footer -->
+    <footer>
+        <div class="footer-content">
+            <p>&copy; 2026 StudentCare. All rights reserved.</p>
+            <div class="footer-links">
+                <a href="#home">Home</a>
+                <a href="#about">About</a>
+                <a href="#contact">Contact</a>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
