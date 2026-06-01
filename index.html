@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>StudentCare - Student Management</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style.css?v=5">
 </head>
 <body>
 
@@ -92,13 +92,31 @@
 
     <!-- login modal -->
     <div class="modal-overlay" id="loginModal">
-        <div class="modal-box">
+        <!-- login box -->
+        <div class="modal-box" id="loginBox">
             <span class="close-btn" onclick="closeLogin()">&times;</span>
             <h2>Admin Login</h2>
             <input type="text" id="username" placeholder="Username">
             <input type="password" id="password" placeholder="Password">
             <button onclick="handleLogin()">Login</button>
             <p id="loginError" style="color:red; display:none; margin-top:10px;">Invalid username or password!</p>
+            <p style="margin-top: 15px; font-size: 13px; text-align: center; color: #555;">
+                Don't have an account? <a href="#" onclick="showRegisterForm()" style="color: #1565c0; text-decoration: none; font-weight: bold;">Register</a>
+            </p>
+        </div>
+
+        <!-- register box -->
+        <div class="modal-box" id="registerBox" style="display:none;">
+            <span class="close-btn" onclick="closeLogin()">&times;</span>
+            <h2>Admin Registration</h2>
+            <input type="text" id="regUsername" placeholder="Choose Username">
+            <input type="password" id="regPassword" placeholder="Choose Password">
+            <input type="password" id="regConfirmPassword" placeholder="Confirm Password">
+            <button onclick="handleRegister()">Register</button>
+            <p id="regError" style="color:red; display:none; margin-top:10px;">Passwords do not match!</p>
+            <p style="margin-top: 15px; font-size: 13px; text-align: center; color: #555;">
+                Already have an account? <a href="#" onclick="showLoginForm()" style="color: #1565c0; text-decoration: none; font-weight: bold;">Login</a>
+            </p>
         </div>
     </div>
 
@@ -146,19 +164,24 @@
         <!-- add form -->
         <div class="admin-section">
             <h3>Add New Student</h3>
-            <div class="admin-form">
-                <input type="text" id="studentName" placeholder="Student Name">
-                <select id="studentCategory">
-                    <option value="">-- Select Department --</option>
-                    <option value="Computer Science">Computer Science</option>
-                    <option value="Engineering">Engineering</option>
-                    <option value="Business">Business</option>
-                    <option value="Arts">Arts</option>
-                    <option value="Science">Science</option>
-                </select>
-                <input type="text" id="studentImage" placeholder="Image URL (optional)">
-                <textarea id="studentDesc" placeholder="Short Description" rows="3"></textarea>
-                <button onclick="addStudent()">Add Student</button>
+            <div class="admin-form-container">
+                <div class="admin-form">
+                    <input type="text" id="studentName" placeholder="Student Name">
+                    <select id="studentCategory">
+                        <option value="">-- Select Department --</option>
+                        <option value="Computer Science">Computer Science</option>
+                        <option value="Engineering">Engineering</option>
+                        <option value="Business">Business</option>
+                        <option value="Arts">Arts</option>
+                        <option value="Science">Science</option>
+                    </select>
+                    <input type="text" id="studentImage" placeholder="Image URL (optional)">
+                    <textarea id="studentDesc" placeholder="Short Description" rows="3"></textarea>
+                    <button onclick="addStudent()">Add Student</button>
+                </div>
+                <div class="admin-form-image">
+                    <img src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?q=80&w=600" alt="Dashboard Illustration">
+                </div>
             </div>
         </div>
 

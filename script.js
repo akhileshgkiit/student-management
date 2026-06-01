@@ -87,25 +87,121 @@ function showPublicStudents() {
 }
 
 
-// ===== LOGIN / LOGOUT =====
+// ===== LOGIN / LOGOUT & REGISTRATION =====
 
 function openLogin() {
+    // reset views to login form by default
+    showLoginForm();
     document.getElementById("loginModal").classList.add("active");
 }
 
 function closeLogin() {
     document.getElementById("loginModal").classList.remove("active");
+    
+    // clear login fields
     document.getElementById("loginError").style.display = "none";
     document.getElementById("username").value = "";
     document.getElementById("password").value = "";
+    
+    // clear registration fields
+    document.getElementById("regError").style.display = "none";
+    document.getElementById("regUsername").value = "";
+    document.getElementById("regPassword").value = "";
+    document.getElementById("regConfirmPassword").value = "";
+}
+
+function showRegisterForm() {
+    document.getElementById("loginBox").style.display = "none";
+    document.getElementById("registerBox").style.display = "block";
+    document.getElementById("regError").style.display = "none";
+}
+
+function showLoginForm() {
+    document.getElementById("registerBox").style.display = "none";
+    document.getElementById("loginBox").style.display = "block";
+    document.getElementById("loginError").style.display = "none";
+}
+
+function handleRegister() {
+    let regUser = document.getElementById("regUsername").value.trim();
+    let regPass = document.getElementById("regPassword").value;
+    let regConfirm = document.getElementById("regConfirmPassword").value;
+
+    // validation
+    if (regUser === "" || regPass === "" || regConfirm === "") {
+        alert("Please fill in all fields!");
+        return;
+    }
+
+    if (regPass !== regConfirm) {
+        document.getElementById("regError").textContent = "Passwords do not match!";
+        document.getElementById("regError").style.display = "block";
+        return;
+    }
+
+    // prevent registering the default username
+    if (regUser.toLowerCase() === "akhil") {
+        document.getElementById("regError").textContent = "Username already exists!";
+        document.getElementById("regError").style.display = "block";
+        return;
+    }
+
+    // read existing accounts
+    let accounts = [];
+    let savedAccounts = localStorage.getItem("adminAccounts");
+    if (savedAccounts) {
+        accounts = JSON.parse(savedAccounts);
+    }
+
+    // check duplicate username
+    for (let i = 0; i < accounts.length; i++) {
+        if (accounts[i].username.toLowerCase() === regUser.toLowerCase()) {
+            document.getElementById("regError").textContent = "Username already exists!";
+            document.getElementById("regError").style.display = "block";
+            return;
+        }
+    }
+
+    // save account
+    accounts.push({
+        username: regUser,
+        password: regPass
+    });
+    localStorage.setItem("adminAccounts", JSON.stringify(accounts));
+
+    alert("Registration successful! You can now log in.");
+    showLoginForm();
+    
+    // pre-fill the username for convenience
+    document.getElementById("username").value = regUser;
 }
 
 function handleLogin() {
-    let user = document.getElementById("username").value;
+    let user = document.getElementById("username").value.trim();
     let pass = document.getElementById("password").value;
 
-    // dummy credentials
+    let isAuthorized = false;
+
+    // 1. check default credentials
     if (user === "akhil" && pass === "akhil@123") {
+        isAuthorized = true;
+    }
+
+    // 2. check registered credentials in localStorage
+    if (!isAuthorized) {
+        let savedAccounts = localStorage.getItem("adminAccounts");
+        if (savedAccounts) {
+            let accounts = JSON.parse(savedAccounts);
+            for (let i = 0; i < accounts.length; i++) {
+                if (accounts[i].username === user && accounts[i].password === pass) {
+                    isAuthorized = true;
+                    break;
+                }
+            }
+        }
+    }
+
+    if (isAuthorized) {
         closeLogin();
         document.getElementById("publicSite").style.display = "none";
         document.getElementById("adminPanel").style.display = "block";

@@ -56,7 +56,11 @@ nav ul li a:hover {
 
 /* hero section */
 .hero {
-    background: linear-gradient(135deg, #1a237e, #1565c0);
+    background-image: linear-gradient(rgba(26, 35, 126, 0.8), rgba(21, 101, 192, 0.8)), 
+                      url('https://images.unsplash.com/photo-1522202176988-66273c2fd55f?q=80&w=1200');
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: cover;
     color: white;
     padding: 100px 5%;
     min-height: 70vh;
@@ -439,11 +443,36 @@ footer {
     color: #333;
 }
 
+.admin-form-container {
+    display: flex;
+    gap: 50px;
+    align-items: center;
+    margin-top: 10px;
+}
+
 .admin-form {
     display: flex;
     flex-direction: column;
     gap: 10px;
-    max-width: 450px;
+    flex: 1;
+    max-width: 480px;
+}
+
+.admin-form-image {
+    flex: 1.5;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    max-width: 600px;
+}
+
+.admin-form-image img {
+    width: 100%;
+    max-height: 290px;
+    object-fit: cover;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    border: 1px solid #e0e0e0;
 }
 
 .admin-form input,
@@ -587,6 +616,20 @@ table tr:hover {
 
     .stats-row {
         flex-direction: column;
+    }
+
+    .admin-form-container {
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .admin-form {
+        max-width: 100%;
+        width: 100%;
+    }
+
+    .admin-form-image {
+        display: none;
     }
 
     .controls-row {
